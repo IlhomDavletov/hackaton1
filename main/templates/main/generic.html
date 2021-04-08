@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% for category in categories %}
+<div class="card mb-3">
+      <h5 class="card-title" style="color: black">{{ category.name }}</h5>
+
+  <img src="{{ category.image.url }}" class="card-img-top" alt="..." style="width: 300px; height: 200px;">
+  <div class="card-body">
+  </div>
+</div>
+
+{% if categories.get_children %}
+                      {% for child in category.get_children %}
+                        <a href="{% url 'category' child.slug %}"><li>{{ child.title }}</li></a>
+                      {% endfor %}
+                      {% endif %}
+
+{% if not categories.get_children %}
+                <section>
+                  <div class="posts">
+                    {% for post in category.posts.all %}
+                    <article>
+                      <a href="#" class="image"><img src="{{ post.image.url }}" alt="" style="width:200px; height:auto"/></a>
+                      <h3>{{ post.title }}</h3>
+                      <p>{{ post.content|truncatewords:10 }}</p>
+                      <ul class="actions">
+                        <li><a href="{% url 'detail' post.id %}" class="button">More</a></li>
+                      </ul>
+                    </article>
+                    {% endfor %}
+                  </div>
+                </section>
+              {% endif %}
+
+{% endfor %}
+
+
+
+{% endblock %}

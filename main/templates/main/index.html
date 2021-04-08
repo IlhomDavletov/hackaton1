@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+						<!-- Featured Post -->
+							<article class="post featured">
+								<header class="major">
+									<h2><a href="#">Welcome<br />
+                                        Check Out The Latest Posts</a></h2>
+									<p>We are pleased that you came here. Enjoy your time exploring the best website in the world!</p>
+								</header>
+								<a href="#" class="image main"><img src="images/pic01.jpg" alt=""></a>
+								<ul class="actions special">
+									      {% if not request.user.is_authenticated %}
+									<li><a href="{% url 'login' %}" class="button large">LogIn</a></li>
+									<li><a href="{% url 'signup' %}" class="button large">SignUp</a></li>
+									{% else %}
+									<a href="{% url 'create-post' %}" class="button large">Create Post<a/>
+									<li><a href="{% url 'logout' %}" class="button large">LogOut</a></li>
+      								<span></span>
+									{% endif %}
+									{% if request.user.is_authenticated %}
+								  {% endif %}
+                                </ul>
+							</article>
+
+						<!-- Posts -->
+
+							<section class="posts">
+							{% for post in posts %}
+								<article>
+									<header>
+										<span class="date">{{ post.created }}</span>
+										<h2>{{ post.title }}</h2>
+									</header>
+									<a href="{% url 'detail' post.id %}" class="image"><img src="{{ post.image.url }}" alt="" width="450" height="300"/></a>
+									<p>{{ post.content|truncatewords:15 }}</p>
+									<ul class="actions special">
+										<li><a href="{% url 'detail' post.id %}" class="button">Full Story</a></li>
+									</ul>
+								</article>
+                                {% endfor %}
+							</section>
+
+
+							<footer>
+								<div class="pagination">
+									<!--<a href="#" class="previous">Prev</a>-->
+									      {% if page_obj.has_previous %}
+									<li class="page-item">
+									<a href="{% url 'list' posts %}?page={{ page_obj.previous_page_number }}" class="page active"><span aria-hidden="true">&laquo;</span></a>
+									</li>
+									{% endif %}
+									<li class="page-item"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+									{% if page_obj.has_next %}
+									<li class="page-item">
+										<a href="{% url 'list' posts %}?page={{ page_obj.next_page_number }}" class="page" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+									</li>
+									{% endif %}
+
+								</div>
+							</footer>
+
+
+{% endblock %}
